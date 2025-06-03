@@ -1,39 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { TextField, Typography } from '@mui/material';
+// src/components/steps/NameStep.jsx
+import React from 'react';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+} from '@mui/material';
 
-const NameStep = ({ data, setData }) => {
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    setError(false);
-  }, [data.firstName, data.lastName]);
-
-  const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
+const NameStep = ({ firstName, lastName, setFirstName, setLastName, onNext }) => {
+  const isValid = firstName.trim() !== '' && lastName.trim() !== '';
 
   return (
-    <div>
-      <Typography variant="h6" className="mb-4">What is your name?</Typography>
-      <div className="flex flex-col gap-4">
-        <TextField
-          label="First Name"
-          name="firstName"
-          value={data.firstName}
-          onChange={handleChange}
-          error={error && !data.firstName}
-          helperText={error && !data.firstName ? "Required" : ""}
-        />
-        <TextField
-          label="Last Name"
-          name="lastName"
-          value={data.lastName}
-          onChange={handleChange}
-          error={error && !data.lastName}
-          helperText={error && !data.lastName ? "Required" : ""}
-        />
-      </div>
-    </div>
+    <Box display="flex" flexDirection="column" alignItems="center" gap={3}>
+      <Typography variant="h6">Enter Your Name</Typography>
+
+      <TextField
+        label="First Name"
+        variant="outlined"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+        fullWidth
+      />
+
+      <TextField
+        label="Last Name"
+        variant="outlined"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+        fullWidth
+      />
+
+      <Box mt={2}>
+        <Button variant="contained" onClick={onNext} disabled={!isValid}>
+          Next
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import axios from '../../api/axios';
+// src/components/steps/TypeStep.jsx
+import React, { useEffect, useState } from "react";
 import {
+  Box,
+  Button,
   FormControl,
   FormLabel,
   RadioGroup,
@@ -8,49 +10,68 @@ import {
   Radio,
   Typography,
   CircularProgress,
-} from '@mui/material';
+} from "@mui/material";
+import axios from "axios";
 
-const TypeStep = ({ data, setData }) => {
+const TypeStep = ({ wheels, vehicleType, setVehicleType, onNext, onBack }) => {
   const [types, setTypes] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!data.wheels) return;
-
-    const fetchTypes = async () => {
+    const fetchVehicleTypes = async () => {
       try {
-        const response = await axios.get(`/vehicle-types?wheels=${data.wheels}`);
+        const response = await axios.get(
+          `http://localhost:4000/api/vehicle-types?wheels=${wheels}`
+        );
         setTypes(response.data);
-        setLoading(false);
       } catch (err) {
-        console.error('Error fetching types:', err);
+        console.error("Error fetching vehicle types:", err);
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchTypes();
-  }, [data.wheels]);
+    if (wheels) {
+      fetchVehicleTypes();
+    }
+  }, [wheels]);
 
-  const handleChange = (e) => {
-    setData({ ...data, vehicleType: e.target.value, vehicleId: '' }); // reset model
+  const handleChange = (event) => {
+    const selected = types.find((t) => t.name === event.target.value);
+    setVehicleType(selected);
   };
 
   return (
-    <div>
-      <Typography variant="h6" className="mb-4">Select vehicle type</Typography>
+    <Box display="flex" flexDirection="column" alignItems="center" gap={3}>
+      <Typography variant="h6">Select Vehicle Type</Typography>
+
       {loading ? (
         <CircularProgress />
       ) : (
         <FormControl component="fieldset">
-          <FormLabel component="legend">Vehicle Types</FormLabel>
-          <RadioGroup value={data.vehicleType} onChange={handleChange}>
+          <FormLabel component="legend">Available Types</FormLabel>
+          <RadioGroup value={vehicleType?.name || ''} onChange={handleChange}>
             {types.map((type) => (
-              <FormControlLabel key={type.id} value={type.id.toString()} control={<Radio />} label={type.name} />
+              <FormControlLabel
+                key={type.id}
+                value={type.name}
+                control={<Radio />}
+                label={type.name}
+              />
             ))}
           </RadioGroup>
         </FormControl>
       )}
-    </div>
+
+      <Box mt={2}>
+        <Button variant="outlined" onClick={onBack} sx={{ mr: 2 }}>
+          Back
+        </Button>
+        <Button variant="contained" onClick={onNext} disabled={!vehicleType}>
+          Next
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

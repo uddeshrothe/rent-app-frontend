@@ -1,22 +1,42 @@
+// src/components/steps/WheelStep.jsx
 import React from 'react';
-import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Typography,
+} from '@mui/material';
 
-const WheelStep = ({ data, setData }) => {
-  const handleChange = (e) => {
-    setData({ ...data, wheels: e.target.value, vehicleType: '', vehicleId: '' }); // Reset types on change
+const WheelStep = ({ wheels, setWheels, onNext, onBack }) => {
+  const handleChange = (event) => {
+    setWheels(event.target.value);
   };
 
   return (
-    <div>
-      <Typography variant="h6" className="mb-4">Number of wheels?</Typography>
+    <Box display="flex" flexDirection="column" alignItems="center" gap={3}>
+      <Typography variant="h6">Select Number of Wheels</Typography>
+
       <FormControl component="fieldset">
-        <FormLabel component="legend">Choose</FormLabel>
-        <RadioGroup row value={data.wheels} onChange={handleChange}>
-          <FormControlLabel value="2" control={<Radio />} label="2" />
-          <FormControlLabel value="4" control={<Radio />} label="4" />
+        <FormLabel component="legend">Choose Wheels</FormLabel>
+        <RadioGroup value={wheels} onChange={handleChange} row>
+          <FormControlLabel value="2" control={<Radio />} label="2 Wheels" />
+          <FormControlLabel value="4" control={<Radio />} label="4 Wheels" />
         </RadioGroup>
       </FormControl>
-    </div>
+
+      <Box mt={2}>
+        <Button onClick={onBack} variant="outlined" sx={{ mr: 2 }}>
+          Back
+        </Button>
+        <Button onClick={onNext} variant="contained" disabled={!wheels}>
+          Next
+        </Button>
+      </Box>
+    </Box>
   );
 };
 
