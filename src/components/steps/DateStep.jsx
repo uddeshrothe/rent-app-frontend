@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@mui/material';
 import { DateRange } from 'react-date-range';
-import { enUS } from 'date-fns/locale'; // ✅ Add this line
+import { enUS } from 'date-fns/locale'; 
 
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
@@ -34,7 +34,7 @@ const DateStep = ({ dateRange, setDateRange, onNext, onBack }) => {
         onChange={handleSelect}
         moveRangeOnFirstSelection={false}
         ranges={range}
-        locale={enUS} // ✅ Fix applied here
+        locale={enUS}
       />
 
       <Box mt={2}>
